@@ -4,7 +4,7 @@ const fetchuser = require('../middleware/fetchuser')
 const Note = require('../models/Note');
 const { body, validationResult } = require('express-validator');
 
-// ROUTE 1 : get all the notes : GET "/api/auth/getuser" . login required.
+// ROUTE 1 : get all the notes : GET "/api/notes/getuser" . login required.
 router.get('/fetchallnotes',fetchuser,  async (req,res)=>{
     try {
         const notes = await Note.find({user : req.user.id});
@@ -15,7 +15,7 @@ router.get('/fetchallnotes',fetchuser,  async (req,res)=>{
     }
 })
 
-// ROUTE 2 : Add a new note : POST "/api/auth/addnote" . login required.
+// ROUTE 2 : Add a new note : POST "/api/notes/addnote" . login required.
 router.post('/addnote', fetchuser,[
     body('title','Enter a valid title').isLength({ min: 2 }),
     body('description','Description must be atleast 5 characters').isLength({ min: 5 }),
@@ -37,9 +37,10 @@ router.post('/addnote', fetchuser,[
     }
 })
 
-// ROUTE 3 : Update an existing note : POST "/api/auth/updatenote" . login required.
+// ROUTE 3 : Update an existing note : PUT "/api/notes/updatenote" . login required.
 router.put('/updatenote/:id',fetchuser,async (req,res)=>{
     const {title, description, tag} = req.body ;
+    try {
     const newNote = {};
     if(title){newNote.title = title};
     if(description) {newNote.description = description};
@@ -52,6 +53,27 @@ router.put('/updatenote/:id',fetchuser,async (req,res)=>{
 
     note = await Note.findByIdAndUpdate(req.params.id , {$set: newNote},{new:true});
     res.json(note);
+    } catch (error) {
+        console.error(error.message); 
+        res.status(500).send("Internal Server Error");
+    }
+})
+
+// ROUTE 4 : Delete a note : DELETE "/api/notes/deletenote" . login required.
+router.delete('/deletenote/:id',fetchuser,async (req,res)=>{
+    try {
+    const {title, description, tag} = req.body ;
+    let note = await Note.findById(req.params.id);
+    if(!note) {return res.status(404).send({Error:"Not Found"})};
+    
+    if(note.user.toString() !== req.user.id) {return res.status(401).send({Error : "Not Allowed"})};
+
+    note = await Note.findByIdAndDelete(req.params.id);
+    res.json("");
+    } catch (error) {
+        console.error(error.message); 
+        res.status(500).send("Internal Server Error");
+    }
 })
 
 module.exports = router
