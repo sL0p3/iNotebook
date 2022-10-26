@@ -62,7 +62,6 @@ router.put('/updatenote/:id',fetchuser,async (req,res)=>{
 // ROUTE 4 : Delete a note : DELETE "/api/notes/deletenote" . login required.
 router.delete('/deletenote/:id',fetchuser,async (req,res)=>{
     try {
-    const {title, description, tag} = req.body ;
     let note = await Note.findById(req.params.id);
     if(!note) {return res.status(404).send({Error:"Not Found"})};
     
