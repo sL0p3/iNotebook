@@ -1,14 +1,10 @@
-import './App.css';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
-import Navbar from './components/Navbar';
-import { Home } from './components/Home';
-import About from './components/About';
-import NoteState from './context/notes/noteState';
-import Alert from './components/Alert';
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import { Home } from "./components/Home";
+import About from "./components/About";
+import NoteState from "./context/notes/noteState";
+import Alert from "./components/Alert";
 
 function App() {
   return (
@@ -16,13 +12,13 @@ function App() {
       <NoteState>
         <Router>
           <Navbar />
-          <Alert message = "This is an amazing Notebook"/>
+          <Alert message="This is an amazing Notebook" />
           <div className="container">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-          </Routes>
-        </div>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+            </Routes>
+          </div>
         </Router>
       </NoteState>
     </>
