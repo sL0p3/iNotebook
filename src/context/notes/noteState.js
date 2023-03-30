@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import NoteContext from "./noteContext";
+import noteContext from "./noteContext";
 
 const NoteState = (props)=>{
     const host = "http://localhost:5000"
@@ -8,7 +8,6 @@ const NoteState = (props)=>{
 
 // Get all Note 
 const getNotes = async ()=>{
-  // TODO : API Call
   // API Call
   const response = await fetch(`${host}/api/notes/fetchallnotes`, {
     method: "GET", 
@@ -25,7 +24,6 @@ const getNotes = async ()=>{
 
     // Add a Note 
     const addNote = async (title, description, tag)=>{
-      // TODO : API Call
       // API Call
       const response = await fetch(`${host}/api/notes/addnote`, {
         method: "POST", 
@@ -52,16 +50,16 @@ const getNotes = async ()=>{
 
     // Delete a Note 
     const deleteNote = async (id)=>{
-      // TODO : API Call
       // API Call
       const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
-        method: "POST", 
+        method: "DELETE", 
         headers: {
           "Content-Type": "application/json",
           "auth-token" :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjM0Y2RhODM4ZWE0NjdjOTgyODQ1YjFkIn0sImlhdCI6MTY2Njc1NDcyNX0.64avhvrlC_EIkYmt3modOHB-gFQjMRQdvJYMqe8dUAg"
         },
-        body: JSON.stringify(),
       });
+      const json =  response.json(); 
+      console.log(json);
       console.log("Deleting a note with id " + id)
       const newNotes = notes.filter((note) =>{ return note._id !== id})
       setNotes(newNotes)
@@ -91,9 +89,9 @@ const getNotes = async ()=>{
     }
 
     return (
-        <NoteContext.Provider value = {{notes, setNotes, addNote , deleteNote, editNote, getNotes}}>
+        <noteContext.Provider value = {{notes, addNote , deleteNote, editNote, getNotes}}>
             {props.children}
-        </NoteContext.Provider>
+        </noteContext.Provider>
     )
 }
 
