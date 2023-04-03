@@ -1,11 +1,10 @@
-import React from 'react'
-import Notes from './Notes'
+import Notes from './Notes';
 
 export const Home = () => {
 
-  return (
-    <div>
-      <Notes />
-   </div>
-  )
+    return (
+        <div> 
+            <Notes/>
+        </div>
+    )
 }

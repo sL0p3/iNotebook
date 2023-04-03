@@ -1,27 +1,48 @@
-import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import { Home } from "./components/Home";
-import About from "./components/About";
-import NoteState from "./context/notes/noteState";
-import Alert from "./components/Alert";
+import './App.css';
+import { useState } from 'react';
+import About from './components/About';
+import AddNote from './components/AddNote';
+import Notes from './components/Notes';
+import Navbar from './components/Navbar';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import NoteState from './context/notes/NoteState'
+import Alert from './components/Alert';
+import SignUp from './components/Signup';
+import Login from './components/Login';
 
 function App() {
+  
+  const [alert, setAlert]=useState(null);
+
+  const showAlert=(msg,type)=>{
+    setAlert({
+      msg:msg,
+      type:type,
+    }) ;
+    setTimeout(()=>{
+      setAlert(null)
+    }, 2500)
+}
+
   return (
-    <>
+    <div className='app'>
       <NoteState>
-        <Router>
+        <BrowserRouter>
           <Navbar />
-          <Alert message="This is an amazing Notebook" />
-          <div className="container">
+          <Alert alert={alert} />
+     
+          <div className='container my-4'>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
+              <Route path="/notes" element={<Notes showAlert={showAlert} />} />
+              <Route path="/" element={<AddNote showAlert={showAlert} />} />
+              <Route path="/about" element={<About showAlert={showAlert}/>} />
+              <Route path="/login" element={<Login showAlert={showAlert} />} />
+              <Route path="/signup" element={<SignUp showAlert={showAlert}/>} />
             </Routes>
           </div>
-        </Router>
+        </BrowserRouter>
       </NoteState>
-    </>
+    </div>
   );
 }
 
